@@ -1,0 +1,58 @@
+#include <iostream>
+#include <vector>
+#include <cstdlib>
+#include <ctime>
+
+using namespace std;
+
+vector<int> gerarVetorAleatorio(int tamanho, int min, int max) {
+    vector<int> vetor;
+    srand(time(0)); 
+    for (int i = 0; i < tamanho; i++) {
+        vetor.push_back(rand() % (max - min + 1) + min);
+    }
+    return vetor;
+}
+
+int particionar(vector<int>& vetor, int inicio, int fim) {
+    int pivo = vetor[fim]; // pivô é o último elemento
+    int i = inicio - 1;
+
+    for (int j = inicio; j < fim; j++) {
+        if (vetor[j] < pivo) {
+            i++;
+            swap(vetor[i], vetor[j]);
+        }
+    }
+    swap(vetor[i + 1], vetor[fim]);
+    return i + 1;
+}
+
+void quickSort(vector<int>& vetor, int inicio, int fim) {
+    if (inicio < fim) {
+        int pi = particionar(vetor, inicio, fim);
+        quickSort(vetor, inicio, pi - 1);
+        quickSort(vetor, pi + 1, fim);
+    }
+}
+
+void imprimirVetor(const vector<int>& vetor) {
+    for (int num : vetor) {
+        cout << num << " ";
+    }
+    cout << endl;
+}
+
+int main() {
+    vector<int> vetor = gerarVetorAleatorio(50, 1, 500);
+
+    cout << "Vetor Aleatorio:\n";
+    imprimirVetor(vetor);
+
+    vector<int> vetorQuick = vetor; // cópia para manter original
+    quickSort(vetorQuick, 0, vetorQuick.size() - 1);
+    cout << "\nVetor Ordenado:\n";
+    imprimirVetor(vetorQuick);
+
+    return 0;
+}
